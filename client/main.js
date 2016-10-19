@@ -11,28 +11,41 @@ if (Meteor.isClient) {
 
         var niveau = [
 
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0]
+            [0,1,0,0,0,1,0,1,0,0,0,0],
+            [0,0,1,0,0,0,0,1,0,1,0,0],
+            [0,1,0,0,0,0,0,0,0,0,1,0],
+            [0,1,1,0,0,1,0,0,0,0,1,0],
+            [0,0,0,0,1,0,0,0,0,1,0,0],
+            [1,0,0,0,0,1,0,1,0,0,1,0]
         ];
+        var counter =0;
+        var text;
 
         function preload() {
 
         }
         function create(){
 
+
+            var graphics = game.add.graphics(0,0);
+
             for(var i=0;i<6;i++){
                 for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
-                        console.log('Il y a une bulle dans la case '+i+' '+j);
+                        graphics.beginFill(0xFF00000, 1);
+                        graphics.drawCircle(50*(j+1),50*(i+1),50);
+                        graphics.events.onInputDown.add(listener, this);
+
                     }
                 }
             }
         }
+        function listener () {
 
+            counter++;
+            text.text = "You clicked " + counter + " times!";
+
+        }
 
 
         
