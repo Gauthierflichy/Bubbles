@@ -25,13 +25,21 @@ if (Meteor.isClient) {
         function create(){
 
             var graphics = game.add.graphics(0,0);
-
+            var diameter = 50;
             for(var i=0;i<6;i++){
                 console.log("ok");
                 for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
+                        var randDiam = parseInt((diameter) * (Math.random(1.5,3)));
+                        console.log(randDiam);
+                        graphics.beginFill(0xFF00000, 0.4);
+                        graphics.drawCircle(50*(j+1),50*(i+1),diameter);
+                        graphics.endFill();
                         graphics.beginFill(0xFF00000, 1);
-                        graphics.drawCircle(50*(j+1),50*(i+1),50);
+                        graphics.drawCircle(50*(j+1),50*(i+1),randDiam);
+                        graphics.endFill();
+
+                        //new Phaser.Circle(50*(j+1),50*(i+1),50)
                     }
                 }
             }
