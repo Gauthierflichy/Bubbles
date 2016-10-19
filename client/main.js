@@ -29,7 +29,7 @@ if (Meteor.isClient) {
         var sprite;
         var diameter = 50;
         var randDiam = parseInt((25) * (Math.random(1.5,3)));
-
+        var info_bulle = [];
         var colors = ['000080', '009926', '880000', 'dd1144', 'E9DC51'];
 
         function preload() {
@@ -72,9 +72,13 @@ if (Meteor.isClient) {
                         bulle[id_bulle].addChild(graphics);
                         bulle[id_bulle].addChild(sprite);
 
+                        bulle[id_bulle].diametre=randDiam;
+                        bulle[id_bulle].positionx=50*(j+1);
+                        bulle[id_bulle].positiony=50*(i+1);
 
                         bulle[id_bulle].events.onInputDown.add(listener, {id: id_bulle});
-                        bulle[id_bulle].events.onInputOver.add(boucle, {id: id_bulle});
+
+                        boucle(id_bulle);
                         bulle[id_bulle].inputEnabled = true;
 
 
@@ -99,28 +103,39 @@ if (Meteor.isClient) {
 
         }
         var boucle_max=0;
-        function boucle () {
+        function boucle (id_bulle) {
 
-            id=this.id;
+            id=id_bulle;
             console.log(bulle[id]);
-            x=bulle[id].children[0].x;
-            y=bulle[id].children[0].y;
-            z=bulle[id].children[1].children[0].z;
-            console.log(x+' '+y+' '+z);
-            circleColor = bulle[id].children[0].graphicsData[0].fillColor;  //couleur aléatoire
+            if(bulle[id]){
+                x=bulle[id].positionx;
+                y=bulle[id].positiony;
+                diametre=bulle[id].diametre+1;
+                if (diametre < 50) {
+                    circleColor = bulle[id].children[0].graphicsData[0].fillColor;
 
 
-            bulle[id].children[1].children[0].graphicsData[0].fillColor="red";
-
-            bulle[id].children[1].children[0].drawCircle(0,0,40);
-           /* var graphics2= game.add.graphics(0,0);   //on ajoute la deuxième bulle
-                graphics2.beginFill(circleColor, 1);
-                graphics2.drawCircle(x,y,40);
-                graphics2.endFill();
-
-                bulle[id].children[1].addChild(graphics2);*/
+                    var graphics2= game.add.graphics(0,0);   //on ajoute une bulle plus grosse
+                    graphics2.beginFill(circleColor, 1);
+                    graphics2.drawCircle(x,y,diametre);
+                    graphics2.endFill();
 
 
+
+
+
+                    bulle[id].diametre=diametre+1;
+                    setTimeout(function () {
+                        // Do Something Here
+                        // Then recall the parent function to
+                        // create a recursive loop.
+                        boucle(id);
+                    }, 200);
+                }else{
+                    bulle[id].children[1].children[0].destroy();
+                }
+
+            }
 
 
         }
