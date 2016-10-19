@@ -48,8 +48,8 @@ if (Meteor.isClient) {
                         timer =Math.floor(Math.random() * 11000 + 1000);  //temps aléatoire de chque bulle
 
 
-                        randDiam = parseInt((diameter/2) * (Math.random(1.5,3)));  // valeur aléatoire du cercle de départ
-
+                        randDiam = parseInt((diameter/2) * (Math.random(1.5,3)+0.01));  // valeur aléatoire du cercle de départ
+                        randVitesse = Math.random(0,2);
                         circleColor = '0x'+ colors[parseInt(Math.random()*5)];  //couleur aléatoire
 
                         var graphics = game.add.graphics(0,0);   //on ajoute la première bulle
@@ -72,13 +72,16 @@ if (Meteor.isClient) {
                         bulle[id_bulle].addChild(graphics);
                         bulle[id_bulle].addChild(sprite);
 
+                        //parametre de la bulle intérieur
                         bulle[id_bulle].diametre=randDiam;
+                        bulle[id_bulle].vitesse=randVitesse;
                         bulle[id_bulle].positionx=50*(j+1);
                         bulle[id_bulle].positiony=50*(i+1);
+                        bulle[id_bulle].statut="alive"
 
                         bulle[id_bulle].events.onInputDown.add(listener, {id: id_bulle});
 
-                        boucle(id_bulle);
+
                         bulle[id_bulle].inputEnabled = true;
 
 
@@ -91,6 +94,7 @@ if (Meteor.isClient) {
                     }
                 }
             }
+            boucle();//on lance la boucle de jeu
         }
         function listener () {
             counter++;
@@ -100,47 +104,64 @@ if (Meteor.isClient) {
 
 
             text.text = "Votre score : " + counter;
+            bulle[id].diametre="undifined";
+            setTimeout(function () {
+                // Do Something Here
+                // Then recall the parent function to
+                // create a recursive loop.
+                boucle();
+            }, 250);
 
         }
         var boucle_max=0;
-        var graphics2;
-        function boucle (id_bulle) {
+        function boucle () {
 
-            id=id_bulle;
-            if(bulle[id].positionx!=='undefined'){ //si il y a encore une sous bulle
-                x=bulle[id].positionx;
-                y=bulle[id].positiony;
-                diametre=bulle[id].diametre;
-                if (diametre < 50) {
-                    circleColor = bulle[id].children[0].graphicsData[0].fillColor;
+            if(boucle_max<200){
+                for(var i=0;i<bulle.length;i++){ //on fait toutes les bulles
+                    id=i;
+                    if(bulle[id].diametre!='undefined' && bulle[id].diametre>2 && bulle[id].children[0]!=='undefined'){ //si il y a encore une sous bulle
+
+                        x=bulle[id].positionx;
+                        y=bulle[id].positiony;
+                        diametre=bulle[id].diametre;
+                        rapiditeExplosion=bulle[id].vitesse;
+                        if (diametre < 50) {
+
+                            circleColor = bulle[id].children[0].graphicsData[0].fillColor;
+
+                            console.log(i+" : "+x+" "+y+" "+diametre)
+                            var graphics2= game.add.graphics(0,0);   //on ajoute une bulle plus grosse
+                            graphics2.beginFill(circleColor, 1);
+                            graphics2.drawCircle(x,y,diametre);
+                            graphics2.endFill();
+
+                            bulle[id].children[1].addChild(graphics2);
 
 
-                    graphics2= game.add.graphics(0,0);   //on ajoute une bulle plus grosse
-                    graphics2.beginFill(circleColor, 1);
-                    graphics2.drawCircle(x,y,diametre);
-                    graphics2.endFill();
 
-                    bulle[id].children[1].addChild(graphics2);
+                            bulle[id].diametre=diametre+0.5;
 
+                        }else if(bulle[id].statut=="alive"){
+                            bulle[id].destroy();
+                            counter--;
+                            text.text = "Votre score : " + counter;
+                            bulle[id].statut="dead";
+                        }
 
+                    }
 
-                    bulle[id].diametre=diametre+0.1;
-                    setTimeout(function () {
-                        // Do Something Here
-                        // Then recall the parent function to
-                        // create a recursive loop.
-                        boucle(id);
-                    }, 250);
-                }else{
-                    bulle[id].destroy();
-                    counter--;
-                    text.text = "Votre score : " + counter;
                 }
+                setTimeout(function () {
+                    // Do Something Here
+                    // Then recall the parent function to
+                    // create a recursive loop.
+                    boucle();
+                }, 250);
 
-            }else{
-                bulle[id].destroy();
-                graphics2[id].destroy();
             }
+            boucle_max++;
+
+
 
 
         }
