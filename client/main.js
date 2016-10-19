@@ -7,6 +7,7 @@ import './main.html';
 if (Meteor.isClient) {
     Template.game.game = function(){
 
+
         var game = new Phaser.Game(900, 650, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
 
         var niveau = [
@@ -24,26 +25,26 @@ if (Meteor.isClient) {
         var id_bulle=0;
         var randDiam = parseInt((diameter) * (Math.random(1.5,3)));
         var sprite;
-        var graphics;
+        var graphics=[];
 
         function preload() {
 
         }
         function create(){
 
-
+            text = game.add.text(250, 16, '', { fill: '#ffffff' });
             game.stage.backgroundColor = "#4488AA";
-            var graphics = game.add.graphics(0,0);
             var diameter = 50;
 
             var colors = ['000080', '009926', '880000', 'dd1144', 'E9DC51'];
- 
+
             for(var i=0;i<6;i++){
                 for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
                         var randDiam = parseInt((diameter) * (Math.random(1.5,3)));
                         var circleColor = '0x'+ colors[parseInt(Math.random()*5)];
-                        console.log(circleColor);
+
+                        var graphics = game.add.graphics(0,0);
 
                         graphics.beginFill(circleColor, 0.4);
                         graphics.drawCircle(50*(j+1),50*(i+1),diameter);
@@ -57,19 +58,11 @@ if (Meteor.isClient) {
 
                         bulle[id_bulle] = game.add.sprite();
 
-                        bulle[id_bulle].addChild(graphics);
+                        bulle[id_bulle] .addChild(graphics);
 
-                        bulle[id_bulle].events.onInputOver.add(listener, this);
-                        console.log(bulle[id_bulle]);
-
-
-
-
-
-
-
-
-
+                        console.log(id_bulle);
+                        bulle[id_bulle] .events.onInputDown.add(listener, {id: id_bulle});
+                        bulle[id_bulle] .inputEnabled = true;
 
                         id_bulle++;
 
@@ -84,12 +77,17 @@ if (Meteor.isClient) {
         function listener () {
 
             counter++;
-            console.log("coucou");
+
+            id=this.id;
+            console.log(id);
+            bulle[id] .destroy();
+
+
             text.text = "You clicked " + counter + " times!";
 
         }
 
 
-        
+
     }
 }
