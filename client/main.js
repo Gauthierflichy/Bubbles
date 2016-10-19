@@ -34,6 +34,8 @@ if (Meteor.isClient) {
 
         function preload() {
 
+
+
         }
 
         function create(){
@@ -48,7 +50,7 @@ if (Meteor.isClient) {
                         timer =Math.floor(Math.random() * 11000 + 1000);  //temps aléatoire de chque bulle
 
 
-                        randDiam = parseInt((diameter/2) * (Math.random(1.5,3)+0.01));  // valeur aléatoire du cercle de départ
+                        randDiam = parseInt((diameter/2) * (Math.random(1.5,3)+0.2));  // valeur aléatoire du cercle de départ
                         randVitesse = Math.random(0,2);
                         circleColor = '0x'+ colors[parseInt(Math.random()*5)];  //couleur aléatoire
 
@@ -94,12 +96,18 @@ if (Meteor.isClient) {
                     }
                 }
             }
-            boucle();//on lance la boucle de jeu
+
+
+            boucle();
         }
+
+
         function listener () {
-            counter++;
+
 
             id=this.id;
+            points=Math.floor(bulle[id].diametre);
+            counter=counter+points;
             bulle[id] .destroy();
 
 
@@ -114,9 +122,10 @@ if (Meteor.isClient) {
 
         }
         var boucle_max=0;
+
         function boucle () {
 
-            if(boucle_max<200){
+            if(boucle_max<400){
                 for(var i=0;i<bulle.length;i++){ //on fait toutes les bulles
                     id=i;
                     if(bulle[id].diametre!='undefined' && bulle[id].diametre>2 && bulle[id].children[0]!=='undefined'){ //si il y a encore une sous bulle
@@ -143,7 +152,7 @@ if (Meteor.isClient) {
 
                         }else if(bulle[id].statut=="alive"){
                             bulle[id].destroy();
-                            counter--;
+                            counter=counter-25;
                             text.text = "Votre score : " + counter;
                             bulle[id].statut="dead";
                         }
