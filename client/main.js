@@ -55,12 +55,12 @@ if (Meteor.isClient) {
 
 
 
-                        sprite = game.add.sprite(100, 100);
+                        bulle[id_bulle] = game.add.sprite();
 
-                        sprite.addChild(graphics);
+                        bulle[id_bulle].addChild(graphics);
 
-                        sprite.events.onInputOver.add(listener, this);
-                        console.log(sprite);
+                        bulle[id_bulle].events.onInputOver.add(listener, this);
+                        console.log(bulle[id_bulle]);
 
 
 
