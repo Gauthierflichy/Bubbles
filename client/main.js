@@ -3,4 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 
-if (Meteor.isClient) {    Template.game.game = function(){       /*all your game code here*/   }}
+if (Meteor.isClient) {    Template.game.game = function(){
+
+
+}}
