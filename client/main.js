@@ -7,7 +7,7 @@ import './main.html';
 if (Meteor.isClient) {
     Template.game.game = function(){
 
-        var game = new Phaser.Game(1920, 1080, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
+        var game = new Phaser.Game(900, 650, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
 
         var niveau = [
 
@@ -24,9 +24,8 @@ if (Meteor.isClient) {
         }
         function create(){
 
-            for(var i=0;i<12;i++){
-                console.log("ok");
-                for(var j=0;j<6;j++){
+            for(var i=0;i<6;i++){
+                for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
                         console.log('Il y a une bulle dans la case '+i+' '+j);
                     }
