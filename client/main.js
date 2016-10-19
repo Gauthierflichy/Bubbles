@@ -7,6 +7,7 @@ import './main.html';
 if (Meteor.isClient) {
     Template.game.game = function(){
 
+
         var game = new Phaser.Game(900, 650, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
 
         var niveau = [
@@ -37,7 +38,7 @@ if (Meteor.isClient) {
             var diameter = 50;
 
             var colors = ['000080', '009926', '880000', 'dd1144', 'E9DC51'];
- 
+
             for(var i=0;i<6;i++){
                 for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
@@ -59,17 +60,9 @@ if (Meteor.isClient) {
 
                         sprite.addChild(graphics);
 
-                        sprite.events.onInputOver.add(listener, this);
+                        sprite.events.onInputDown.add(listener, this);
+                        sprite.inputEnabled = true;
                         console.log(sprite);
-
-
-
-
-
-
-
-
-
 
                         id_bulle++;
 
@@ -90,6 +83,6 @@ if (Meteor.isClient) {
         }
 
 
-        
+
     }
 }
