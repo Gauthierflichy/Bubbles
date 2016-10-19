@@ -103,38 +103,43 @@ if (Meteor.isClient) {
 
         }
         var boucle_max=0;
+        var graphics2;
         function boucle (id_bulle) {
 
             id=id_bulle;
-            console.log(bulle[id]);
-            if(bulle[id]){
+            if(bulle[id].positionx!=='undefined'){ //si il y a encore une sous bulle
                 x=bulle[id].positionx;
                 y=bulle[id].positiony;
-                diametre=bulle[id].diametre+1;
+                diametre=bulle[id].diametre;
                 if (diametre < 50) {
                     circleColor = bulle[id].children[0].graphicsData[0].fillColor;
 
 
-                    var graphics2= game.add.graphics(0,0);   //on ajoute une bulle plus grosse
+                    graphics2= game.add.graphics(0,0);   //on ajoute une bulle plus grosse
                     graphics2.beginFill(circleColor, 1);
                     graphics2.drawCircle(x,y,diametre);
                     graphics2.endFill();
 
+                    bulle[id].children[1].addChild(graphics2);
 
 
 
-
-                    bulle[id].diametre=diametre+1;
+                    bulle[id].diametre=diametre+0.1;
                     setTimeout(function () {
                         // Do Something Here
                         // Then recall the parent function to
                         // create a recursive loop.
                         boucle(id);
-                    }, 200);
+                    }, 250);
                 }else{
-                    bulle[id].children[1].children[0].destroy();
+                    bulle[id].destroy();
+                    counter--;
+                    text.text = "Votre score : " + counter;
                 }
 
+            }else{
+                bulle[id].destroy();
+                graphics2[id].destroy();
             }
 
 
