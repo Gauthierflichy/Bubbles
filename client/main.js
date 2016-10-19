@@ -11,12 +11,12 @@ if (Meteor.isClient) {
 
         var niveau = [
 
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,1,1,0]
+            [0,1,0,0,0,1,0,1,0,0,0,0],
+            [0,0,1,0,0,0,0,1,0,1,0,0],
+            [0,1,0,0,0,0,0,0,0,0,1,0],
+            [0,1,1,0,0,1,0,0,0,0,1,0],
+            [0,0,0,0,1,0,0,0,0,1,0,0],
+            [1,0,0,0,0,1,0,1,0,0,1,0]
         ];
 
         function preload() {
@@ -24,11 +24,14 @@ if (Meteor.isClient) {
         }
         function create(){
 
-            for(var i=0;i<12;i++){
+            var graphics = game.add.graphics(0,0);
+
+            for(var i=0;i<6;i++){
                 console.log("ok");
-                for(var j=0;j<6;j++){
+                for(var j=0;j<12;j++){
                     if(niveau[i][j]==1){
-                        console.log('Il y a une bulle dans la case '+i+' '+j);
+                        graphics.beginFill(0xFF00000, 1);
+                        graphics.drawCircle(50*(j+1),50*(i+1),50);
                     }
                 }
             }
